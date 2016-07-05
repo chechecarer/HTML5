@@ -1,0 +1,7 @@
+CACHE MANIFEST
+applicationCache.html
+test.css
+boll.jpg
+
+FALLBACK:
+dog.jpg boll.jpg
