@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>地理位置服务</title>
+    <style>
+        #bdmap{
+            width: 800px;
+            height: 600px;
+            margin: 10px auto;
+        }
+        .infoWin{
+            width: 300px;
+            padding: 10px;
+        }
+        .infoTitle{
+            display: block;
+            font-size: 1.5em;
+            color: blue;
+            margin-bottom: 10px;
+        }
+        .addr{
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <h1>HTML5地理位置服务</h1>
+    <div id="bdmap"></div>
+    <script src="http://api.map.baidu.com/api?v=1.3"></script>
+    <script>
+        function init(){
+            navigator.geolocation.getCurrentPosition(getLocation,locationError,{timeout:10000});
+        }
+        function getLocation(position){
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            console.log('经度：'+lat);
+            console.log('纬度：'+lon);
+            var acc = position.coords.accuracy;
+            var time = new Date(position.timestamp).toLocaleString();
+            console.log('准确度：'+acc);
+            console.log('时间：'+time);
+
+            showMap(lon,lat,10);
+        }
+        function locationError(error){
+            switch (error.code){
+                case error.PERMISSION_DENIED:
+                    alert('访问位置信息被拒绝');
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert('获取位置信息失败');
+                    break;
+                case error.TIMEOUT:
+                    alert('定位超时');
+                    break;
+                default :
+                    alert('无法识别的错误码：'+error.code);
+            }
+        }
+        function showMap(longtitude,latitude,zoom){
+            var map = new BMap.Map('bdmap');
+            var point = new BMap.Point(longtitude,latitude);
+            map.centerAndZoom(point,zoom);
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+            var myGeo = new BMap.Geocoder();
+            myGeo.getLocation(point,function(result){
+                if(result){
+//                    alert('result='+result.address);
+                    console.log(result);
+                    var infoContent = '<div class="infoWin"><span class="infoTitle">当前位置是：' +
+                            '</span><span class="addr">'+result.address+'</span></div>';
+                    var infoWindow = new BMap.InfoWindow(infoContent);
+                    map.openInfoWindow(infoWindow,map.getCenter);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

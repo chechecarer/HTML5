@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+//        alert('pattern' in document.createElement('input'));
+    </script>
+    <style>
+        .data_custom{
+            display:inline-block;
+            position:relative;
+        }
+        .data_custom:hover{
+            color:transparent;
+        }
+        .data_custom:hover:after{
+            content: attr(data-hover-response);
+            color: black;
+            position: absolute;
+            left:0
+        }
+
+        input{
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type=range]:before{
+            content:attr(min);
+            padding-right: 5px;
+        }
+        input[type=range]:after{
+            content:attr(max);
+            padding-left: 5px;
+        }
+        output{
+            display: block;
+            font-size: 5.5em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <hgroup>
+            <h1>Recall Fan Page</h1>
+            <h2>Only for people who want the memory of a lifetime</h2>
+        </hgroup>
+        Hello,I'm the header
+    </header>
+    <figure>
+        <img src="images/dog.jpg" alt="this is a image"/>
+        <figcaption>
+            <p>This is an <small> image</small> of dogs</p>
+        </figcaption>
+    </figure>
+    <ul contenteditable="true">
+        <li>HTML5<mark>新特性</mark></li>
+        <li>Node.js</li>
+        <li>ExtJS</li>
+    </ul>
+    <table contenteditable="true">
+        <tr>
+            <td>郑州</td>
+            <td>90</td>
+        </tr>
+        <tr>
+            <td>郑州</td>
+            <td>90</td>
+        </tr>
+        <tr>
+            <td>郑州</td>
+            <td>90</td>
+        </tr>
+    </table>
+    <form action="" method="get">
+        <label for="name">姓名：</label>
+        <input type="text" name="name"id="name" placeholder="4到10个字符" pattern="[A-Za-z]{4,10}" required/>
+        <label for="email">邮箱：</label>
+        <input id="email" name="email" type="email" placeholder="输入邮箱地址" required autofocus/>
+        <h4>音量控制</h4>
+        <input type="range" name="range" min="0" max="10" step="1" value=""/>
+        <output name="result"></output>
+        <button type="submit">确定</button>
+    </form>
+    <a class="data_custom"  data-hover-response="我说过不要碰我" href="#">不要碰我</a>
+    <h2>音频播放</h2>
+    <audio  controls="controls">
+        <source src="audio/01. ALWAYS.mp3"/>
+        <a href="audio/01. ALWAYS.mp3">点击下载</a>
+    </audio>
+    <h2>视频播放</h2>
+    <video controls preload>
+        <source src="video/video1.mp4">
+    </video>
+    <footer>
+        Hello,I'm the footer
+    </footer>
+</body>
+</html>

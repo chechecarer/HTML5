@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>视频碎片实例</title>
+    <style>
+        #hidden{
+            display: none;//视频不显示，但是有声音
+        }
+        #show{
+            text-align: center;
+            font-weight: bold;
+        }
+        #output{
+            border: 5px solid #666666;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div id="hidden">
+        <video id="sourcevid" autoplay loop>
+            <source src="video/video1.mp4" type="video/mp4"/>
+        </video>
+    </div>
+    <div id="show">
+        <p>在矩形框中单击鼠标，画面将呈现碎片效果，再次单击鼠标，画面将复原
+        <canvas id="output" width="1000" height="600" onmousedown="clickShow()"></canvas>
+    </div>
+
+    <script>
+        var video;
+        var vWidth;
+        var vHeight;
+
+        var output;
+        var outputWidth = document.getElementById('output').attributes['width'].value;
+        var outputHeight = document.getElementById('output').attributes['height'].value;
+
+        //碎片数组
+        var chipsArray = [];
+        var chipWidth;
+        var chipHeight;
+
+        //碎片构造函数
+        function Chip(){
+            this.originX = 0;
+            this.originY = 0;
+            this.currentX = 0;
+            this.currentY = 0;
+
+            this.rotation = 0;
+
+            this.videoX = 0;
+            this.videoY = 0;
+        }
+        //创建碎片数组
+        function newChips(){
+            vWidth = video.videoWidth;
+            vHeight = video.videoHeight;
+
+            chipWidth = vWidth/6;
+            chipHeight = vHeight/3;
+
+            var offsetX = (outputWidth-vWidth)/2;
+            var offsetY = (outputHeight-vHeight)/2;
+
+            var y = 0;
+            while(y < vHeight){
+                var x = 0;
+                while(x < vWidth){
+                    var chip = new Chip();
+                    //视频画面的角度碎片的坐标
+                    chip.videoX = x;
+                    chip.videoY = y;
+                    //canvas的角度碎片的坐标
+                    chip.originX = offsetX + x;
+                    chip.originY = offsetY + y;
+                    //canvas角度，碎片当前坐标
+                    chip.currentX = chip.originX;
+                    chip.currentY = chip.originY;
+
+                    chipsArray.push(chip);
+                    x += chipWidth;
+                }
+                y += chipHeight;
+            }
+        }
+
+        function init(){
+            video = document.getElementById('sourcevid');
+            var outputcanvas = document.getElementById('output');
+            output = outputcanvas.getContext('2d');
+
+            newChips();
+            setInterval(draw,33);//每33毫秒绘制一次，形成流畅视频
+        }
+        function draw(){
+            output.clearRect(0,0,outputWidth,outputHeight);
+            for(var i=0; i<chipsArray.length; i++){
+                var chip = chipsArray[i];
+
+                //保存当前坐标系
+                output.save();
+
+                //修改坐标系
+                output.translate(chip.currentX,chip.currentY);
+                output.rotate(chip.rotation*(Math.PI/180));
+
+                //绘制碎片
+                output.drawImage(video,chip.videoX,chip.videoY,chipWidth,chipHeight,0,0,chipWidth,chipHeight);
+                output.strokeRect(0,0,chipWidth,chipHeight);
+
+                //恢复坐标系
+                output.restore();
+            }
+//            vWidth = video.videoWidth;
+//            vHeight = video.videoHeight;
+//            var offsetX = (outputWidth-vWidth)/2;
+//            var offsetY = (outputHeight-vHeight)/2;
+//            output.drawImage(video,0,0,vWidth,vHeight,offsetX,offsetY,vWidth,vHeight);
+        }
+
+        var flag = false;
+        function clickShow(){
+            flag = !flag;
+
+            for(var i=0; i<chipsArray.length; i++){
+                var chip = chipsArray[i];
+                if(flag){
+                    chip.currentX += (Math.random()*2 -1)*200;
+                    chip.currentY += (Math.random()*2 -1)*180;
+                    chip.rotation = Math.random()*90;
+                }
+                else{
+                    chip.currentX = chip.originX;
+                    chip.currentY = chip.originY;
+                    chip.rotation = 0;
+                }
+            }
+            draw();
+        }
+    </script>
+</body>
+</html>

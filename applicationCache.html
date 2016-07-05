@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html manifest="test.manifest">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>HTML5 离线应用</title>
+    <link rel="stylesheet" href="css/applicationCache.css">
+</head>
+<body>
+    <h1>HTML5 离线应用模式</h1>
+     <img src="images/dog.jpg" alt="状态图示">
+     <div>
+         <p>当前状态：<span id="status">【未知】</span></p>
+         <button id="btn">强制更新缓存</button>
+         <script>
+             var statusEm = document.getElementById('status');
+             var btn = document.getElementById('btn');
+
+             var appCache = window.applicationCache ? window.applicationCache : undefined;
+
+             function getStatus(){
+                 if(typeof appCache !== 'undefined'){
+                     switch (appCache.status){
+                         case appCache.UNCACHED://0
+                             alert('uncached');
+                             statusEm.innerHTML = '未缓存';
+                             break;
+                         case 1:
+                             alert('idle');
+                             statusEm.innerHTML = '已缓存';
+                             break;
+                         case 2:
+                             alert('checking');
+                             statusEm.innerHTML = '已检测，未更新';
+                             break;
+                         case 3:
+                             alert('downloading');
+                             statusEm.innerHTML = '已经更新';
+                             break;
+                         case 4:
+                             alert('updateready');
+                             statusEm.innerHTML = '已经更新';
+                             break;
+                         case 5:
+                             alert('obsolete');
+                             statusEm.innerHTML = '已经过期';
+                             break;
+                         default :
+                             alert('unknow');
+                             statusEm.innerHTML = '【未知】';
+                     }
+                 }
+                 else{
+                     statusEm.innerHTML = '【浏览器不支持】'
+                 }
+             }
+
+             btn.addEventListener('click',function(){
+                 if(typeof (appCache) !== 'undefined'){
+                     appCache.update();
+                     getStatus();
+                 }
+                 else{
+                     statusEm.innerHTML = '【浏览器不支持】';
+                 }
+             },false);
+
+             window.onload = getStatus;
+         </script>
+     </div>
+</body>
+</html>

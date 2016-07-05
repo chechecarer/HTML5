@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>弹跳小球案例</title>
+</head>
+<body onload="init()">
+    <canvas id="canvas" width="800" height="600">
+        您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var boxX = 10;
+        var boxY = 10;
+        var boxWidth = 700;
+        var boxHeight = 500;
+
+        var bollX = 50;
+        var bollY = 50;
+        var ballMoveX = 20;
+        var ballMoveY = 45;
+        var ballDiameter = 64;
+
+        var boxBorderTop = boxY;
+        var boxBorderBottom = boxY + boxHeight - ballDiameter;
+
+        var boxBorderLeft = boxX;
+        var boxBoderRight = boxX +boxWidth - ballDiameter;
+
+        var img = new Image();
+        img.src ='images/boll.jpg';
+
+        function drawBall(){
+            ctx.clearRect(boxX,boxY,boxWidth,boxHeight);
+            move();
+            ctx.strokeRect(boxX,boxY,boxWidth,boxHeight);
+            ctx.drawImage(img,bollX,bollY,64,64);
+        }
+
+        function move(){
+            tmpX = bollX + ballMoveX;
+            tmpY = bollY + ballMoveY;
+
+            if(tmpY < boxBorderTop){
+                tmpY = boxBorderTop;
+                ballMoveY = -ballMoveY
+            }
+            if(tmpY > boxBorderBottom){
+                tmpY = boxBorderBottom;
+                ballMoveY = - ballMoveY;
+            }
+            if(tmpX < boxBorderLeft){
+                tmpX = boxBorderLeft;
+                ballMoveX = -ballMoveX;
+
+            }
+            if(tmpX > boxBoderRight){
+                tmpX = boxBoderRight;
+                ballMoveX = -ballMoveX;
+            }
+            bollX = tmpX;
+            bollY = tmpY;
+
+
+
+        }
+
+        function init(){
+//            drawBall();
+            setInterval(drawBall,200);
+        }
+    </script>
+</body>
+</html>

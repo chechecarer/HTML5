@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>路径操作实例</title>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="600">
+            您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'red';
+
+        ctx.strokeRect(100,10,640,480);
+        ctx.strokeRect(260,130,320,240);
+
+        //绘制菱形
+        ctx.beginPath();
+        ctx.moveTo(420,10);
+        ctx.lineTo(100,250);
+        ctx.lineTo(420,490);
+        ctx.lineTo(740,250);
+        ctx.closePath();
+        //以上仅仅只是规定了路径，stroke()才真正绘制
+        ctx.stroke();
+    </script>
+</body>
+</html>

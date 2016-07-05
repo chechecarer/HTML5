@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body{
+            text-align: center;
+        }
+        video{
+            margin: 20px auto 0 auto;
+        }
+        div{
+            width: 648px;
+            height: 180px;
+            margin: 0 auto;
+        }
+        ul{
+            height: 200px;
+        }
+        li{
+            list-style: none;
+            margin-right: 38px;
+            float: left;
+        }
+        h3{
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <video id="sourcevid" width="530" height="300" autoplay="autoplay" controls="controls" loop="loop">
+        <source src="video/video1.mp4" type="video/mp4"/>
+        您的浏览器不支持video
+    </video>
+    <div>
+        <ul>
+            <li>
+                <h3>原始图片</h3>
+                <canvas id="opic" width="265" height="150"></canvas>
+            </li>
+            <li>
+                <h3>水印图片</h3>
+                <canvas id="wpic" width="265" height="150"></canvas>
+            </li>
+        </ul>
+    </div>
+    <script>
+        var v = document.getElementById('sourcevid');
+        var oc = document.getElementById('opic');
+        var ocWidth = oc.attributes['width'].value;
+        var ocHeight = oc.attributes['height'].value;
+        var octx = oc.getContext('2d');
+        var wc = document.getElementById('wpic');
+        var wctx = wc.getContext('2d');
+
+
+        function draw(){
+            octx.drawImage(v,0,0, v.videoWidth, v.videoHeight,0,0,ocWidth,ocHeight);
+            wctx.drawImage(oc,0,0);
+            wctx.fillStyle = 'orange';
+            wctx.font = 'bold 24px Cursive';
+            wctx.fillText('Cheche_carrie',50,140);
+        }
+
+        v.onmouseover = function(){
+            this.play();
+
+        }
+        v.onmouseout = function(){
+            this.pause();
+            draw();
+        }
+    </script>
+</body>
+</html>
